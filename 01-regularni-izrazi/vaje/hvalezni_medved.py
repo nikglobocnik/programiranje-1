@@ -26,10 +26,10 @@ medved. Zvrhano zibelko sladkih hrušk mi je prinesel za en sam izdrt trn"."""
 # >>> find_words(test_text, 'de')
 # {'izdere', 'debel', 'oddide', 'začudeno'}
 ###############################################################################
-def find_words(niz, podniz):
-    x = r'\w*\b'+podniz+'\w*\b'
-    zadetki = re.findall(x, niz)
-    return set(zadetki)
+def find_words(text, substring):
+    rx = r'\b\w*' + substring + r'\w*\b'
+    matches = re.findall(rx, text)
+    return set(matches)
 ###############################################################################
 # 2) Sestavite funkcijo [find_prefix], ki vrne množico vseh besed, ki se
 #    pojavijo v nizu in imajo dano predpono.
