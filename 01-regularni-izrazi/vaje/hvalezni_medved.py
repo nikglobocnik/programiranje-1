@@ -43,6 +43,7 @@ def find_words(text, substring):
 def find_prefix(text, prefix):
     rx = r'\b' + prefix + r'\w*\b'
     return set(re.findall(rx, text))
+
 ###############################################################################
 # 3) Sestavite funkcijo [find_suffix], ki vrne množico vseh besed, ki se
 #    pojavijo v nizu in imajo dano pripono.
@@ -51,6 +52,9 @@ def find_prefix(text, prefix):
 # {'zibala', 'razveselila', 'prestrašila', 'šivala', 'opazila', 'tla'}
 ###############################################################################
 
+def find_suffix(text, suffix):
+    rx = r'\b\w*' + suffix + r'\b'
+    return set(re.findall(rx, text))
 
 ###############################################################################
 # 4) Sestavite funkcijo [double_letters], ki sprejme niz in vrne množico vseh
