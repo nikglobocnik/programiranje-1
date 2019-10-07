@@ -65,10 +65,8 @@ def find_suffix(text, suffix):
 ###############################################################################
 
 def double_letters(niz):
-    iskane_besede = (
-        r'\b.*' +
-        r'.{2}' +
-        r'.*\b'
-    )
+    iskane_besede = r'(\b\w*(\w)\2\w*\b)'
     zadetki = re.findall(iskane_besede, niz)
-    return set(zadetki)
+    return set([zadetek[0] for zadetek in zadetki])
+
+print(double_letters('A volunteer is worth twenty pressed men.'))
