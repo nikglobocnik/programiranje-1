@@ -31,7 +31,7 @@ def find_words(text, substring):
     rx = r'\b\w*' + substring + r'\w*\b'
     matches = re.findall(rx, text)
     return set(matches)
-
+k
 ###############################################################################
 # 2) Sestavite funkcijo [find_prefix], ki vrne množico vseh besed, ki se
 #    pojavijo v nizu in imajo dano predpono.
