@@ -4,7 +4,12 @@
 Namig: Definirajte pomožno funkcijo za obračanje seznamov.
 [*----------------------------------------------------------------------------*)
 
-let rec reverse = ()
+let reverse list =
+  let rec reverse' list acc =
+    match list with 
+    | [] -> acc
+    | x :: xs -> reverse' (x :: acc) xs
+  in reverse' [] list
 
 (*----------------------------------------------------------------------------*]
  Funkcija [repeat x n] vrne seznam [n] ponovitev vrednosti [x]. Za neprimerne
@@ -39,7 +44,21 @@ let rec range = ()
  - : int list = [2; 3; 4; 5; 6]
 [*----------------------------------------------------------------------------*)
 
-let rec map = ()
+let rec map f xs =
+match xs with
+| [] -> []
+| x :: xs -> f x :: map f xs
+
+
+let map_tlrec f list =
+  let rec map_tlrec' list acc =
+    match list with
+    | [] -> reverse acc
+    | x :: xs -> map_tlrec' xs (f x :: acc)
+  in
+  map_tlrec' list []
+
+
 
 (*----------------------------------------------------------------------------*]
  Funkcija [map_tlrec] je repno rekurzivna različica funkcije [map].
