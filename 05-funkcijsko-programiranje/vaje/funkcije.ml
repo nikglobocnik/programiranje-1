@@ -5,11 +5,12 @@ Namig: Definirajte pomožno funkcijo za obračanje seznamov.
 [*----------------------------------------------------------------------------*)
 
 let reverse list =
-  let rec reverse' list acc =
+  let rec reverse' acc list =
     match list with 
     | [] -> acc
     | x :: xs -> reverse' (x :: acc) xs
   in reverse' [] list
+
 
 (*----------------------------------------------------------------------------*]
  Funkcija [repeat x n] vrne seznam [n] ponovitev vrednosti [x]. Za neprimerne
@@ -21,7 +22,11 @@ let reverse list =
  - : string list = []
 [*----------------------------------------------------------------------------*)
 
-let rec repeat = ()
+let rec repeat x n =
+  if n <= 0 then [] else x :: repeat x (n-1)
+
+let rec bad_repeat x n =
+  if n <= 0 then [] else bad_repeat x (n-1) @ [x]
 
 (*----------------------------------------------------------------------------*]
  Funkcija [range] sprejme število in vrne seznam vseh celih števil od 0 do
@@ -32,7 +37,14 @@ let rec repeat = ()
  - : int list = [0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
 [*----------------------------------------------------------------------------*)
 
-let rec range = ()
+let rec bad_range n = 
+  if n < 0 then [] else bad_range (n-1) @ [n]
+
+let rec range n =
+  let rec range' n acc = 
+    if n < 0 then acc else range' (n-1) (n :: acc)
+  in
+  range' n []
 
 (*----------------------------------------------------------------------------*]
  Funkcija [map f list] sprejme seznam [list] oblike [x0; x1; x2; ...] in
@@ -49,17 +61,6 @@ match xs with
 | [] -> []
 | x :: xs -> f x :: map f xs
 
-
-let map_tlrec f list =
-  let rec map_tlrec' list acc =
-    match list with
-    | [] -> reverse acc
-    | x :: xs -> map_tlrec' xs (f x :: acc)
-  in
-  map_tlrec' list []
-
-
-
 (*----------------------------------------------------------------------------*]
  Funkcija [map_tlrec] je repno rekurzivna različica funkcije [map].
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -68,7 +69,13 @@ let map_tlrec f list =
  - : int list = [2; 3; 4; 5; 6]
 [*----------------------------------------------------------------------------*)
 
-let rec map_tlrec = ()
+let map_tlrec f list =
+  let rec map_tlrec' list acc =
+    match list with
+    | [] -> reverse acc
+    | x :: xs -> map_tlrec' xs (f x :: acc)
+  in
+  map_tlrec' list []
 
 (*----------------------------------------------------------------------------*]
  Funkcija [mapi] je ekvivalentna python kodi:
@@ -86,7 +93,16 @@ let rec map_tlrec = ()
  - : int list = [0; 1; 2; 5; 6; 7]
 [*----------------------------------------------------------------------------*)
 
-let rec mapi = ()
+let rec mapi f list =
+  let rec mapi' f list mapi_list index = 
+    match list with
+    | [] -> reverse mapi_list
+    | x :: xs -> 
+        let mapi_list' = f x index :: mapi_list in
+        let index' =  index + 1 in
+        mapi' f xs mapi_list' index'
+  in
+  mapi' f list [] 0
 
 (*----------------------------------------------------------------------------*]
  Funkcija [zip] sprejme dva seznama in vrne seznam parov istoležnih
@@ -98,7 +114,11 @@ let rec mapi = ()
  Exception: Failure "Different lengths of input lists.".
 [*----------------------------------------------------------------------------*)
 
-let rec zip = ()
+let rec zip list1 list2 = 
+  match list1, list2 with
+  | [], [] -> []
+  | _, [] | [], _ -> failwith "Different lengths of input lists."
+  | x :: xs , y :: ys -> (x, y) :: (zip xs ys)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [unzip] je inverz funkcije [zip], torej sprejme seznam parov
@@ -108,7 +128,11 @@ let rec zip = ()
  - : int list * string list = ([0; 1; 2], ["a"; "b"; "c"])
 [*----------------------------------------------------------------------------*)
 
-let rec unzip = ()
+let rec unzip = function
+  | [] -> ([], [])
+  | (x, y) :: tail -> 
+      let (list1, list2) = unzip tail 
+      in  (x :: list1, y :: list2)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [unzip_tlrec] je repno rekurzivna različica funkcije [unzip].
@@ -117,7 +141,14 @@ let rec unzip = ()
  - : int list * string list = ([0; 1; 2], ["a"; "b"; "c"])
 [*----------------------------------------------------------------------------*)
 
-let rec unzip_tlrec = ()
+let rec unzip_tlrec list = 
+  let rec unzip_tlrec' list acc1 acc2 =
+    match list with
+    | [] -> (reverse acc1, reverse acc2)
+    | (x, y) :: tail -> unzip_tlrec' tail (x :: acc1) (y :: acc2)
+  in 
+  unzip_tlrec' list [] []
+
 
 (*----------------------------------------------------------------------------*]
  Funkcija [loop condition f x] naj se izvede kot python koda:
@@ -132,7 +163,7 @@ let rec unzip_tlrec = ()
  - : int = 12
 [*----------------------------------------------------------------------------*)
 
-let rec loop = ()
+let rec loop condition f x = if condition x then loop condition f (f x) else x
 
 (*----------------------------------------------------------------------------*]
  Funkcija [fold_left_no_acc f list] sprejme seznam [x0; x1; ...; xn] in
@@ -144,7 +175,10 @@ let rec loop = ()
  - : string = "FICUS"
 [*----------------------------------------------------------------------------*)
 
-let rec fold_left_no_acc = ()
+let rec fold_left_no_acc f = function
+  | [] | _ :: [] -> failwith "List to short!" (*Prazen seznam ali seznam z enim elementom, tj. _::[] naj da napako! *)
+  | x :: y :: [] -> f x y
+  | x :: y :: tail -> fold_left_no_acc f ((f x y) :: tail)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [apply_sequence f x n] vrne seznam zaporednih uporab funkcije [f] na
@@ -158,7 +192,15 @@ let rec fold_left_no_acc = ()
  - : int list = []
 [*----------------------------------------------------------------------------*)
 
-let rec apply_sequence = ()
+let rec apply_sequence f x n =
+  let rec apply_sequence' f x n acc =
+    if n<0 then 
+      reverse acc
+    else
+      apply_sequence' f (f x) (n-1) (x :: acc)
+  in 
+  apply_sequence' f x n []
+    
 
 (*----------------------------------------------------------------------------*]
  Funkcija [filter f list] vrne seznam elementov [list], pri katerih funkcija [f]
