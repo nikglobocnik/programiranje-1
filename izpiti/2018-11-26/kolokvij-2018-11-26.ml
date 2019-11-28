@@ -16,7 +16,7 @@ let flyers = [ {status = Staff; name = "Quinn"}
              ; {status = Passenger (Group 1000); name = "Aleks"}
              ; {status = Passenger (Group 1000); name = "Robin"}
              ; {status = Staff; name = "Alan"}
-             ]
+             ]aa
 
 (* -------- 6 -------- *)
 
