@@ -12,7 +12,7 @@ def fib(n):
 
 # Z uporabo dekoratorja izboljšajte naivno različico.
 # Omejitev: Preseže največjo dovoljeno globino rekurzija za ~350.
-@...
+
 def fib_cache(n):
 
 # Nariši drevo klicov za navadno rekurzivno fib funkcijo pri n=5 in
