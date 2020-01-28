@@ -1,6 +1,6 @@
-#from functools import lru_cache
+from functools import lru_cache
 
-#@lru_cache(maxsize=None)
+@lru_cache(maxsize=None)
 def simetricen(w):
     return w == w[::-1]
 

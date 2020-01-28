@@ -1,7 +1,7 @@
-#from functools import lru_cache
+from functools import lru_cache
 
 def pobeg_zabe(mocvara):
-    #@lru_cache(maxsize=None)
+    @lru_cache(maxsize=None)
     def pobeg(k, e):
         if k >= len(mocvara):
             return 0
